@@ -1,23 +1,25 @@
 //var Emitter = require('./emitter');
 var Emitter = require('events'); //En vez de inyectar la dependencia de nuestro 'event emitter', inyectamos la dependencia del 'event emitter' propio de NODE JS en la cual hace más robusto el Emitter ya que su constructor abarca más parámetros como el total de eventos, el máximo de escuchas de eventos y los eventos que contiene.
+var Config = require('./config'); //Esta dependcia nos ayuda a tener un "mapa" de las variables en string que teníamos para así tenerlas en un solo lugar en nuestro código y así podemos referirnos al string mediante la notación del punto sin necesidad de repetir el string varias veces.
 
+var config = Config;
 var emtr = new Emitter();
 
-emtr.on('greet', () => {
+emtr.on(config.events.GREET, () => {    
     console.log('Somewhere, someone said hello.');
 });
-
-emtr.on('greet', () => {
+//Con esta notación nos permite acceder a una variable que se encuentra en otra dependencia en un grupo en específico. En este caso se guarda la función en el evento 'GREET'.
+emtr.on(config.events.GREET, () => {
     console.log('A greeting occurred!');
 });
 
 console.log('Hello!');
 emtr.emit('greet');
-/* En la consola se muestra el mensaje de la línea 13 y se ejecutaron las funciones de la línea 5 y 9, 'Somewhere, someone said hello.' y 'A greeting occurred!'. El método emit permite llamar a las funciones que se encuentra en la variabñe 'emtr'.*/
 
-emtr.on('jump', () => {
+emtr.on(config.events.JUMP, () => {
     console.log('someone jumped!');
 });
+//Con esta notación nos permite acceder a una variable que se encuentra en otra dependencia en un grupo en específico. En este caso se guarda la función en el evento 'JUMP'.
 
-console.log(emtr); //Se manda a llamar la variable 'emtr' y en la consola se ve desglozado lo que contiene la variable: 2 eventos, greet y jump; el primero posee dos funciones anónimas, y el segundo solo tiene una función anónima.
-emtr.emit('jump'); // Se manda a llamar el evento 'jump' que se encuentra en la variable 'emtr' por el método 'emit' y se muestra en la conola.
+console.log(emtr); 
+emtr.emit('jump'); 
